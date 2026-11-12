@@ -1,38 +1,54 @@
-# Bank of America (BAC) Stock-Price Modelling with Machine Learning
+# Bank of America Stock-Price Modelling with Machine Learning
 
-A machine-learning project focused on modelling the historical stock price of **Bank of America Corporation (NYSE: BAC)**.
+A supervised-learning exercise that models the daily closing price of **Bank of America (BAC)** using historical price information from financial peers and broader market indicators.
 
-## Project Objectives
+## Data and Features
 
-- Obtain and inspect historical BAC market data.
-- Prepare data for supervised machine-learning analysis.
-- Explore relationships between market features and the target variable.
-- Train and evaluate the model implemented in the notebook.
-- Examine observed versus model-estimated values.
+The notebook downloads daily market data for the period **2002-01-01 to 2025-01-01** for:
 
-## Implementation
+| Category | Instruments / indicators |
+|---|---|
+| Target | Bank of America (BAC) |
+| Banking peers | JPM, MS, Citigroup (C), Wells Fargo (WFC) |
+| Market proxy | SPY |
+| Volatility | VIX |
+| Interest rates | US 10-year Treasury yield (^TNX) |
+| Macro / commodities | US Dollar Index, crude-oil futures, gold futures |
 
-The main implementation is in `BAC_prediction_using_machine_learning.ipynb`. Refer to the notebook for the exact feature set, algorithm, train/test design, hyperparameters, and evaluation metrics.
+The feature-engineering workflow uses lagged peer and market variables, BAC moving averages (5-day and 10-day), and a lagged five-day BAC percentage change. The target is the BAC closing price.
+
+## Models Compared
+
+- Decision Tree Regressor
+- Random Forest Regressor
+- K-Nearest Neighbours Regressor
+- Support Vector Regressor
+
+The notebook uses a chronological 90% / 10% train-test split (shuffle=False) and compares models using R², mean squared error (MSE), root mean squared error (RMSE), and actual-versus-predicted plots.
+
+## Repository Contents
+
+- BAC_prediction_using_machine_learning.ipynb — complete implementation.
 
 ## Technology
 
-Python · Jupyter Notebook · pandas · NumPy · Machine-learning libraries used in the notebook
+Python · NumPy · pandas · yfinance · Matplotlib · Plotly · scikit-learn
 
 ## Run
 
-Open the notebook in Jupyter or Google Colab. A common starting environment is:
-
-```bash
-pip install numpy pandas matplotlib seaborn scikit-learn yfinance jupyter
+~~~bash
+pip install -r requirements.txt
 jupyter notebook
-```
+~~~
 
-Install any additional packages imported by the notebook. External market-data retrieval may require an internet connection and may produce updated observations.
+Open the notebook and execute the cells in sequence. The notebook retrieves data at runtime, so results may vary with provider updates.
 
-## Evaluation Notes
+## Research Limitations and Next Steps
 
-Stock-price modelling is vulnerable to overfitting, look-ahead bias, and non-stationarity. Use chronological validation, document the forecast horizon, compare with naïve price and return baselines, and report out-of-sample error metrics. Predictive accuracy alone does not imply economic value or trading profitability.
+The current target is a price level, which is persistent and can make price-level metrics look stronger than true predictive performance. A stronger study should include a previous-close benchmark, predict returns or price changes, scale features for distance/kernel-based models, tune hyperparameters using time-series validation, and report model performance across multiple rolling test periods. Lag construction and missing-data handling should also be reviewed for each asset independently.
+
+Model fit is not evidence of a profitable strategy. Execution costs, forecast-to-signal conversion, and portfolio-level evaluation would be required for an investment claim.
 
 ## Disclaimer
 
-Educational modelling exercise only. Not investment advice or a recommendation to trade BAC shares.
+Educational machine-learning project only. Not investment advice or a recommendation to trade BAC.
